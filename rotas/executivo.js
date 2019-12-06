@@ -1,8 +1,12 @@
 module.exports = app => {
 //acoes rota /executivo
 
-    app.post('/executivo', (req, res) => {
-        console.log('Recebida requisicao de teste na porta 8080.')
+    app.post('/executivo/cadastrar', (req, res) => {
+        console.log('Recebida requisicao de post.')
+        
+        let executivo = req.body;
+        console.log(executivo)
+
         res.status(201).send('ok.');
     });
 
