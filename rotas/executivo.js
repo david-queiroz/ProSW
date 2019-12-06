@@ -10,17 +10,20 @@ module.exports = app => {
         executivo.data = new Date;
 
         let connection = app.bancoDeDados.createDBConnection();
-        let modeleDao = new app.bancoDeDados.modeloDao(connection);
+        let modeleDao = new app.bancoDeDados.ModeloDao(connection);
 
         modeleDao.salva(executivo, (erro, resultado) => {
+            if (erro){
+                res.send(erro);
+                
+            }
             console.log('execultivo criado');
 
-            // res.json(executivo)
+             res.status(201).json(executivo)
         });
-
-
-        console.log(connection)
-        res.status(201).send(executivo);
+        
+       // console.log(connection)
+       //res.status(201).send(executivo);
     });
 
     app.put('/executivo', (req, res) => {
