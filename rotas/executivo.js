@@ -1,7 +1,7 @@
 module.exports = app => {
 //acoes rota /executivo
 
-    app.post('/executivo/cadastrar', (req, res) => {
+    app.post('/executivo', (req, res) => {
         console.log('Recebida requisicao de post.')
         
         let executivo = req.body;
@@ -19,47 +19,77 @@ module.exports = app => {
             }
             console.log('execultivo criado');
 
-             res.status(201).json(executivo)
+             res.   status(201).json(executivo)
         });
         
        // console.log(connection)
        //res.status(201).send(executivo);
     });
 
-    app.put('/executivo', (req, res) => {
-        console.log('Recebida requisicao de teste na porta 8080.')
-        res.status(203).send('ok.');
+    app.put('/executivo/:id', (req, res) => {
+        console.log('Recebida requisicao de put')
+        let executivo = {};
+        let id = req.params.id;
+        
+        executivo.status = 'atualizado';
+        executivo.id = id;
+
+        let connection = app.bancoDeDados.createDBConnection();
+        let modeleDao = new app.bancoDeDados.ModeloDao(connection);
+
+        modeleDao.atualiza(executivo, (erro,resultado) => {
+            if (erro){
+                res.send(erro);
+                
+            }
+            console.log('execultivo atualizado');
+
+             res.status(201).json(executivo)
+            });
     });
 
     app.get('/executivo', (req, res) => {
         console.log('Recebida requisicao execultivo.')
-        res.send('OK');
+        let executivo = {};
+        let id = req.params.id;
+        
+        executivo.id = id;
+
+        let connection = app.bancoDeDados.createDBConnection();
+        let modeleDao = new app.bancoDeDados.ModeloDao(connection);
+
+        modeleDao.lista(executivo, (erro,resultado) => {
+            if (erro){
+                res.send(erro);
+                
+            }
+            console.log('execultivo atualizado');
+
+             res.status(200).json(executivo)
+            });
     });
 
-    app.delete('/executivo', (req, res) => {
+    app.delete('/executivo/:id', (req, res) => {
         console.log('Recebida requisicao execultivo.')
-        res.send('ok.');
-    });
-//acoes rota /desenvolvimento
+        let executivo = {};
+        let id = req.params.id;
+        
+        executivo.status = 'apagado';
+        executivo.data = new Date;
+        executivo.id = id;
 
-    app.post('/desenvolvimento', (req, res) => {
-        console.log('Recebida requisicao de teste na porta 8080.')
-        res.status(201).send('ok.');
+        let connection = app.bancoDeDados.createDBConnection();
+        let modeleDao = new app.bancoDeDados.ModeloDao(connection);
+
+        modeleDao.apaga(executivo, (erro,resultado) => {
+            if (erro){
+                res.send(erro);
+                
+            }
+            console.log('execultivo atualizado');
+
+             res.status(200).json(executivo)
+            });
     });
     
-    app.put('/desenvolvimento', (req, res) => {
-        console.log('Recebida requisicao de teste na porta 8080.')
-        res.status(203).send('ok.');
-    });
-    
-    app.get('/desenvolvimento', (req, res) => {
-        console.log('Recebida requisicao execultivo.')
-        res.send('OK');
-    });
-    
-    app.delete('/desenvolvimento', (req, res) => {
-        console.log('Recebida requisicao execultivo.')
-        res.send('ok.');
-    });
-    
-    };
+};
