@@ -5,9 +5,22 @@ module.exports = app => {
         console.log('Recebida requisicao de post.')
         
         let executivo = req.body;
-        console.log(executivo)
+        
+        executivo.status = 'criado';
+        executivo.data = new Date;
 
-        res.status(201).send('ok.');
+        let connection = app.bancoDeDados.createDBConnection();
+        let modeleDao = new app.bancoDeDados.modeloDao(connection);
+
+        modeleDao.salva(executivo, (erro, resultado) => {
+            console.log('execultivo criado');
+
+            // res.json(executivo)
+        });
+
+
+        console.log(connection)
+        res.status(201).send(executivo);
     });
 
     app.put('/executivo', (req, res) => {

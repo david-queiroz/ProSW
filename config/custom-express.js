@@ -11,6 +11,7 @@ module.exports = function(){
 
     consign()
         .include('rotas')
+        .then('bancoDeDados')
         .into(app);
     
     return app;
